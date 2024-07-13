@@ -1,0 +1,31 @@
+#player {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    background: url('images/player.png') no-repeat center center;
+    background-size: contain;
+    border: 1px solid red; /* Adicione esta linha */
+}
+
+.collectible-item {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: url('images/.collectible-item.png')
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 1px solid blue; /* Adicione esta linha */
+}
+
+.falling-object {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: url('images/.falling-object.png')
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 1px solid blue; /* Adicione esta linha */
+}

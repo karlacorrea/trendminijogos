@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizz TrendShop Minigames</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #8c3f53;
+            padding: 30px;
+        }
+        .container {
+            background-color: #82b7fc;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: auto;
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            background-color: rgb(63, 96, 140);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+</head>
+<body>
+    <div class="container">
+      <img src="imagem/TrendShopLogo.png">
+       
+        <div class="question">
+            <h1>Bem-vindo ao Shopping! </h1>
+            <h3></h3>O que trouxe você aqui hoje?</h3>
+        </div>
+        <form id="quizForm">
+            <label class="option">
+                <input type="radio" name="activity" value="date" required> Fazer compras!
+            </label>
+            <label class="option">
+                <input type="radio" name="activity" value="kids"> Assistir um filme!
+            </label>
+            <label class="option">
+                <input type="radio" name="activity" value="dessert"> Comer!
+            </label>
+            <label class="option">
+                <input type="radio" name="activity" value="shopping">Passeiar!
+            </label>
+            <label class="option">
+                <input type="radio" name="activity" value="browsing"> Resolver Pendências!
+            </label>
+            <button type="submit">Enviar</button>
+        </form>
+        <div id="response" style="display: none; margin-top: 20px;">
+            <h3>Obrigado por participar do nosso quizz!</h3>
+            <p>Quer acumular pontos jogando, aguarde!</p>
+
+
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <script>
+        let map, userMarker, path;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -23.51119024105411, lng: -46.61311238033685 }, // Coordenadas iniciais (São Paulo)
+                zoom: 16
+            });
+            
+            path = new google.maps.Polyline({
+                map: map,
+                path: [],
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(function(position) {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    if (!userMarker) {
+                        userMarker = new google.maps.Marker({
+                            position: pos,
+                            map: map,
+                            title: 'Você está aqui!'
+                        });
+                    } else {
+                        userMarker.setPosition(pos);
+                    }
+
+                    path.getPath().push(new google.maps.LatLng(pos.lat, pos.lng));
+                    map.setCenter(pos);
+                }, function() {
+                    handleLocationError(true, map.getCenter());
+                });
+            } else {
+                handleLocationError(false, map.getCenter());
+            }
+        }
+
+        function handleLocationError(browserHasGeolocation, pos) {
+            const infoWindow = new google.maps.InfoWindow({
+                content: browserHasGeolocation ?
+                    'Erro: O serviço de geolocalização falhou.' :
+                    'Erro: Seu navegador não suporta geolocalização.',
+                position: pos
+            });
+            infoWindow.open(map);
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('response').style.display = 'block';
+            setTimeout(function() {
+                window.location.href = 'https://shoppingmaria.com.br'; // URL do site do shopping
+            }, 3000); // Redireciona após 3 segundos
+        });
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>
